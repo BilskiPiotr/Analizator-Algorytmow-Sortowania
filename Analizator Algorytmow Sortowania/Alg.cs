@@ -12,11 +12,11 @@ namespace Analizator_Algorytmow_Sortowania
 
         public static DataTable firstDataTable;
         public static DataTable secondDataTable;
-        public static int LiczbaElementow { get; set; }
-        public static int IloscSymulacji { get; set; }
-        public static int MinimalnaWartosc { get; set; }
-        public static int MaksymalnaWartosc { get; set; }
-        public static int[] TablicaDoPosortowania { get; set; }
+        public static int LiczbaElementow;
+        public static int IloscSymulacji;
+        public static int MinimalnaWartosc;
+        public static int MaksymalnaWartosc;
+        public static int[] TablicaDoPosortowania;
         public static Color ChartBackColor { get; set; }
         public static Color ChartLinecOLOR { get; set; }
         public static int ChartLineWeight { get; set; }
@@ -51,32 +51,15 @@ namespace Analizator_Algorytmow_Sortowania
                 }
                 if (posortowana) break;
             }
-
             // zatrzymanie stopera
             stoper.Stop();
             czasSortowaniaTablicy = Convert.ToDouble(stoper.Elapsed.TotalMilliseconds);
-
-
         }
 
 
 
 
 
-        // Dodanie wyników sortowania do tymczasowej DT
-        public static void AddToDataTable(int iloscElementow, int licznikOperacji, double czasSortowania, int licznikPowtórzeń)
-        {
-
-            DataRow row = firstDataTable.NewRow();
-            row["Numer"] = licznikPowtórzeń.ToString();
-            row["Rozmiar tablicy"] = iloscElementow.ToString();
-            row["Liczba operacji"] = licznikOperacji.ToString();
-            row["Złożoność obliczeniowa"] = (((LiczbaElementow * LiczbaElementow) - LiczbaElementow) / 2).ToString();
-            row["Czas sortowania"] = czasSortowania.ToString(); ;
-            row["Licznik_Rozmiar"] = (licznikOperacji / LiczbaElementow).ToString();
-            row["Rozmiar_Czas"] = (Convert.ToDouble(LiczbaElementow) / czasSortowania).ToString();
-            firstDataTable.Rows.Add(row);
-        }
 
     }
 }

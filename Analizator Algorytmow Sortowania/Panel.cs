@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -415,165 +416,76 @@ namespace Analizator_Algorytmow_Sortowania
                 }
                 if (DgwWyniki != null)
                 {
-                    DgwWyniki.Rows.Clear();
+                    if (DgwWyniki.Rows.Count > 0)
+                        DgwWyniki.Rows.RemoveAt(0);
                 }
 
 
-                    switch (Alg.Algorytm)
-                    {
-                        case 1:
-                            posortuj = new Thread(RunBubbleSort);
-                            posortuj.Start();
-                            break;
-                        //case 2:
-                        //    Algorytmy.PB_NapełnienieTablicy(ref tablicaDoPosortowania, maksymalnyRozmiarTablicy, minimalnaWartość, maksymalnaWartość, ref rozmiarTablicy);
-                        //    Algorytmy.PB_BucketSort(tablicaDoPosortowania, out licznikOperacji, out czas);
-                        //    licznikPowtórzeń++;
-                        //    PB_AddToDGW();
-                        //    break;
-                        //case 3:
-                        //    Algorytmy.PB_NapełnienieTablicy(ref tablicaDoPosortowania, maksymalnyRozmiarTablicy, minimalnaWartość, maksymalnaWartość, ref rozmiarTablicy);
-                        //    Algorytmy.PB_CountingSort(tablicaDoPosortowania, out licznikOperacji, out czas);
-                        //    licznikPowtórzeń++;
-                        //    PB_AddToDGW();
-                        //    break;
-                        //case 4:
-                        //    Algorytmy.PB_NapełnienieTablicy(ref tablicaDoPosortowania, maksymalnyRozmiarTablicy, minimalnaWartość, maksymalnaWartość, ref rozmiarTablicy);
-                        //    Algorytmy.PB_InsertionSort(tablicaDoPosortowania, out licznikOperacji, out czas);
-                        //    licznikPowtórzeń++;
-                        //    PB_AddToDGW();
-                        //    break;
-                        //case 5:
-                        //    // uruchomienie stopera sortowania tablicy
-                        //    Stopwatch PB_Stoper = new Stopwatch();
-                        //    PB_Stoper.Start();
+                switch (Alg.Algorytm)
+                {
+                    case 1: // Bubble Sort
+                        {
+                            RunBubbleSort();
+                        }
+                        break;
+                    case 2: // Bucket Sort
+                        {
 
-                        //    Algorytmy.PB_NapełnienieTablicy(ref tablicaDoPosortowania, maksymalnyRozmiarTablicy, minimalnaWartość, maksymalnaWartość, ref rozmiarTablicy);
-                        //    Algorytmy.PB_MergeSort(tablicaDoPosortowania, 0, tablicaDoPosortowania.Length - 1);
-                        //    licznikPowtórzeń++;
+                        }
+                        break;
+                    case 3: // Count Sort
+                        {
 
-                        //    // zatrzymanie stopera
-                        //    PB_Stoper.Stop();
-                        //    czas = PB_Stoper.Elapsed.TotalMilliseconds.ToString();
-                        //    PB_AddToDGW();
-                        //    break;
-                        //case 6:
-                        //    Algorytmy.PB_NapełnienieTablicy(ref tablicaDoPosortowania, maksymalnyRozmiarTablicy, minimalnaWartość, maksymalnaWartość, ref rozmiarTablicy);
-                        //    Algorytmy.PB_QuickSort(tablicaDoPosortowania, 0, tablicaDoPosortowania.Length - 1);
-                        //    licznikPowtórzeń++;
-                        //    PB_AddToDGW();
-                        //    break;
-                        //case 7:
-                        //    break;
-                        //case 8:
-                        //    Algorytmy.PB_NapełnienieTablicy(ref tablicaDoPosortowania, maksymalnyRozmiarTablicy, minimalnaWartość, maksymalnaWartość, ref rozmiarTablicy);
-                        //    Algorytmy.PB_SelectionSort(tablicaDoPosortowania, out licznikOperacji, out czas);
-                        //    licznikPowtórzeń++;
-                        //    PB_AddToDGW();
-                        //    break;
-                        case 9:
+                        }
+                        break;
+                    case 4: // Insertion Sort
+                        {
+
+                        }
+                        break;
+                    case 5: // Merge Sort
+                        {
+
+                        }
+                        break;
+                    case 6: // Quick Sort
+                        {
+
+                        }
+                        break;
+                    case 7: // Select Sort
+                        {
+
+                        }
+                        break;
+                    case 8: // Redix Sort
+                        {
+
+                        }
+                        break;
+                    case 9: // Library Sort
+                        {
                             MessageBox.Show("Nie wybrano algorytmu", "Uwaga!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            break;
-                    }
-
-
-                //    // sortowanie wyników w kontrolce DataGridView względem 2 kolumny
-                //    dgw_wyniki.Sort(dgw_wyniki.Columns[1], ListSortDirection.Ascending);
-
-                //    for (int PB_NrWiersza = 0; PB_NrWiersza < dgw_wyniki.Rows.Count; PB_NrWiersza++)
-                //    {
-                //        dgw_wyniki.Rows[PB_NrWiersza].Cells[0].Value = PB_NrWiersza + 1;
-
-                //    }
-                //}
-                //else
-                //{
-                //    MessageBox.Show("Nie wprowadzono wszystkich wymaganych danych wejściowych. Proszę poprawić elementy zaznaczone na czerwono.", "Informacja",
-                //                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                //    if (int.Parse(tb_minimalnaIlośćPowtórzeń.Text) < 100)
-                //        tb_minimalnaIlośćPowtórzeń.BackColor = Color.OrangeRed;
-                //    else
-                //        tb_minimalnaIlośćPowtórzeń.BackColor = Color.White;
-
-                //    if (int.Parse(tb_maksymalnyRozmiarTablicy.Text) == 0)
-                //        tb_maksymalnyRozmiarTablicy.BackColor = Color.OrangeRed;
-                //    else
-                //        tb_maksymalnyRozmiarTablicy.BackColor = Color.White;
-
-                //    if ((int.Parse(tb_maksymalnaWartość.Text) - int.Parse(tb_minimalnaWartość.Text)) <= int.Parse(tb_maksymalnyRozmiarTablicy.Text))
-                //        tb_maksymalnaWartość.BackColor = Color.OrangeRed;
-                //    else
-                //        tb_maksymalnaWartość.BackColor = Color.White;
-
-                //    if (wybranyAlgorytm == 9)
-                //        gbox_algorytmy.BackColor = Color.OrangeRed;
-                //    else
-                //        gbox_algorytmy.BackColor = Color.White;
+                        }
+                            break;                       
+                }
             }
             else
                 return;
 
 
             if (CbResultMode.SelectedIndex == 0)
+            {
                 DgwWyniki.Visible = true;
-            //CreateDGW(Alg.firstDataTable);
+                DgwWyniki.Refresh();
+            }
+
             else if (CbResultMode.SelectedIndex == 1)
                 CreateChart();
             else
             {
                 MessageBox.Show("Nie określono sposobu prezentacji wyników. Proszę wybrać wykres lub tabelę");
                 return;
-            }
-
-            switch (Alg.Algorytm)
-            {
-                case 1: // Bubble Sort
-                    {
-                        posortuj = new Thread(RunBubbleSort);
-                        posortuj.Start();
-                    }
-                    break;
-                case 2: // Bucket Sort
-                    {
-
-                    }
-                    break;
-                case 3: // Count Sort
-                    {
-
-                    }
-                    break;
-                case 4: // Insertion Sort
-                    {
-
-                    }
-                    break;
-                case 5: // Merge Sort
-                    {
-
-                    }
-                    break;
-                case 6: // Quick Sort
-                    {
-
-                    }
-                    break;
-                case 7: // Select Sort
-                    {
-
-                    }
-                    break;
-                case 8: // Redix Sort
-                    {
-
-                    }
-                    break;
-                case 9: // Library Sort
-                    {
-
-                    }
-                    break;
             }
         }
 
@@ -705,36 +617,44 @@ namespace Analizator_Algorytmow_Sortowania
         // Sprawdzenie wartości startowych dla symulacji sortowania
         private bool CheckInitialValues(string iloscElementow, string liczbaPowturzen, string minimalnaWartosc, string maksymalnaWartosc)
         {
-            int value = 0;
             bool testParameters = false;
+            int value = 0;
 
-            errorProvider.Clear();
-            if (int.TryParse(iloscElementow, out value) && value > 100)
+            if (ChbManualData.Checked)
             {
-                Alg.LiczbaElementow = value;
-                testParameters = true;
-                value = 0;
+                errorProvider.Clear();
+                if (int.TryParse(iloscElementow, out value) && value > 100)
+                {
+                    Alg.LiczbaElementow = value;
+                    testParameters = true;
+                    value = 0;
+                }
+                else
+                {
+                    errorProvider.SetError(TbIloscElementow, "Minimalna sendowna ilość elementów do testowania algorytmu to 100");
+                    testParameters = false;
+                    value = 0;
+                    return testParameters;
+                }
+                errorProvider.Clear();
+                if (int.TryParse(liczbaPowturzen, out value) && value > 10 && value < 500)
+                {
+                    Alg.IloscSymulacji = value;
+                    testParameters = true;
+                    value = 0;
+                }
+                else
+                {
+                    errorProvider.SetError(TbLiczbaPowturzen, "Minimalna sensowna liczba powturzeń to 50. Proszę zwiększyć wpisaną wartość");
+                    testParameters = false;
+                    value = 0;
+                    return testParameters;
+                }
             }
             else
             {
-                errorProvider.SetError(TbIloscElementow, "Minimalna sendowna ilość elementów do testowania algorytmu to 100");
-                testParameters = false;
-                value = 0;
-                return testParameters;
-            }
-            errorProvider.Clear();
-            if (int.TryParse(liczbaPowturzen, out value) && value > 50 && value < 500)
-            {
-                Alg.IloscSymulacji = value;
-                testParameters = true;
-                value = 0;
-            }
-            else
-            {
-                errorProvider.SetError(TbLiczbaPowturzen, "Minimalna sensowna liczba powturzeń to 50. Proszę zwiększyć wpisaną wartość");
-                testParameters = false;
-                value = 0;
-                return testParameters;
+                Alg.LiczbaElementow = rnd.Next(100, 4999);
+                Alg.IloscSymulacji = rnd.Next(10, 499);
             }
             errorProvider.Clear();
             if (int.TryParse(minimalnaWartosc, out value))
@@ -828,10 +748,10 @@ namespace Analizator_Algorytmow_Sortowania
             Alg.firstDataTable = new DataTable("First");
             Alg.secondDataTable = new DataTable("Second");
 
-            Alg.firstDataTable.Columns.Add("Numer", Type.GetType("System.String"));
-            Alg.firstDataTable.Columns.Add("Rozmiar tablicy", Type.GetType("System.String"));
-            Alg.firstDataTable.Columns.Add("Liczba operacji", Type.GetType("System.String"));
-            Alg.firstDataTable.Columns.Add("Czas sortowania", Type.GetType("System.String"));
+            Alg.firstDataTable.Columns.Add("Nr", typeof (int));
+            Alg.firstDataTable.Columns.Add("Rozmiar tablicy", typeof (int));
+            Alg.firstDataTable.Columns.Add("Liczba operacji", typeof (int));
+            Alg.firstDataTable.Columns.Add("Czas (s)", typeof(double));
             Alg.firstDataTable.Columns.Add("Złożoność obliczeniowa", Type.GetType("System.String"));
             Alg.firstDataTable.Columns.Add("Stosunek rozmiaru tablicy do ilości iteracji", Type.GetType("System.String"));
             Alg.firstDataTable.Columns.Add("Stosunek rozmiaru tablicy do Złożoności Analitycznej", Type.GetType("System.String"));
@@ -843,22 +763,32 @@ namespace Analizator_Algorytmow_Sortowania
 
             DataColumn[] uniqueColumn =
             {
-                Alg.firstDataTable.Columns["Numer"]
+                Alg.firstDataTable.Columns["Nr"]
             };
 
             Alg.firstDataTable.Constraints.Add(new UniqueConstraint(uniqueColumn));
-
-            //Alg.firstDataTable.Rows.Add(new object[]
-            //{
-            //    "1", "12998", "1008.00", "10", "104", "444"
-            //});
-
-            DgwWyniki.DataSource = Alg.firstDataTable;
-            DgwWyniki.Refresh();
         }
 
-        // napełnienie tablicy do posortowania liczbami losowymi 
-        private int[] NapełnienieTablicy(out int liczbaElementow)
+
+        // Dodanie wyników sortowania do tymczasowej DT
+        private void AddToDataTable(DataTable dt, int iloscElementow, int licznikOperacji, double czasSortowania, int licznikPowtórzeń)
+        {
+            //int nfi = (NumberFormatInfo)CultureInfo.InvariantCulture.NumberFormat.Clone();
+            //nfi.NumberGroupSeparator = " ";
+            //string formatted = 1234897.11m.ToString("#,0.00", nfi); // "1 234 897.11"
+            DataRow row = dt.NewRow();
+            row["Nr"] = (licznikPowtórzeń + 1);
+            row["Rozmiar tablicy"] = iloscElementow/*.ToString("{0 000 000}")*/;
+            row["Liczba operacji"] = licznikOperacji/*.ToString()*/;
+            row["Złożoność obliczeniowa"] = (((Alg.LiczbaElementow * Alg.LiczbaElementow) - Alg.LiczbaElementow) / 2).ToString();
+            row["Czas (s)"] = czasSortowania;
+            row["Stosunek rozmiaru tablicy do ilości iteracji"] = (licznikOperacji / Alg.LiczbaElementow).ToString();
+            row["Stosunek rozmiaru tablicy do Złożoności Analitycznej"] = (Convert.ToDouble(Alg.LiczbaElementow) / czasSortowania).ToString();
+            dt.Rows.Add(row);
+        }
+
+    // napełnienie tablicy do posortowania liczbami losowymi 
+    private int[] NapełnienieTablicy(out int liczbaElementow)
         {
             // Zainicjowanie zmiennej losowej
             rnd = new Random();
@@ -883,11 +813,16 @@ namespace Analizator_Algorytmow_Sortowania
         {
             for (int m = 0; m < Alg.IloscSymulacji; m++)
             {
-                Thread.Sleep(15);
+                Thread.Sleep(7);
                 Alg.TablicaDoPosortowania = NapełnienieTablicy(out iloscElementow);
                 Alg.SortowanieBąbelkowe(Alg.TablicaDoPosortowania, out licznikOperacji, out czas);
-                Alg.AddToDataTable(iloscElementow, licznikOperacji, czas, m);
+                AddToDataTable(Alg.firstDataTable, iloscElementow, licznikOperacji, czas, m);
             }
+
+            DgwWyniki.DataSource = Alg.firstDataTable;
+            DgwWyniki.Refresh();
+
+
         }
 
     }
