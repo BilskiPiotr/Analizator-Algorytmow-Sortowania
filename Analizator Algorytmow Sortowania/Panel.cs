@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Threading;
 using System.Windows.Forms;
@@ -49,6 +50,10 @@ namespace Analizator_Algorytmow_Sortowania
         Label LbChartLineColor;
         Label LbLineWeight;
         Label LbLineStyle;
+        Label LbSelectedAlgorythm;
+        Label LbNbSymulationLeft;
+
+        ColouredProgressBar PbProcentWykonania;
 
         TextBox TbLiczbaPowturzen;
         TextBox TbIloscElementow;
@@ -68,11 +73,12 @@ namespace Analizator_Algorytmow_Sortowania
         private string text;
         private bool selected;
         private Random rnd;
-        private Thread posortuj;
 
         private int licznikOperacji;
         private int iloscElementow;
         private double czas;
+        private double lnpStep = 0.0;
+        private double actVal = 0.0;
 
         // Tablica opcji prezentacji wyników sortowania
         private object[] resultMode = { "Show Table", "Show Chart" };
@@ -202,7 +208,7 @@ namespace Analizator_Algorytmow_Sortowania
             GbAction = crl.Create_GoupBox(512, 470, 117, 80, "Action", "Action");
             panel.Controls.Add(GbAction);
 
-            CbResultMode = crl.Create_ComboBox("Compare", 15, 22, 87, font = new Font("Microsoft Sans Serif", 8, FontStyle.Bold),
+            CbResultMode = crl.Create_ComboBox("Compare", 13, 22, 91, font = new Font("Microsoft Sans Serif", 8, FontStyle.Bold),
                                             foreColor = Color.DarkGreen, backColor = Color.Ivory);
             CbResultMode.SelectedIndexChanged += new EventHandler(ResultMode_SelectedIndexChanged);
             for (int i = 0; i < 2; i++)
@@ -212,7 +218,7 @@ namespace Analizator_Algorytmow_Sortowania
             GbAction.Controls.Add(CbResultMode);
 
 
-            BtRunTest = crl.Create_Button("RunAlgorythm", 15, 47, 87, 23, font = new Font("Microsoft Sans Serif", 7, FontStyle.Bold),
+            BtRunTest = crl.Create_Button("RunAlgorythm", 13, 47, 91, 23, font = new Font("Microsoft Sans Serif", 7, FontStyle.Bold),
                                         foreColor = Color.DarkBlue, backColor = Color.Orange, text = "RUN");
             BtRunTest.Click += new EventHandler(BtRunTest_Click);
             BtRunTest.MouseHover += new EventHandler(BtRunTest_MouseHover);
@@ -300,15 +306,40 @@ namespace Analizator_Algorytmow_Sortowania
             panel.Controls.Add(GbWyniki);
 
             ChWykres = crl.Create_Chart("Nazwa Wykresu", 15, 11, 450, 348, "Text wykresu");
-            ChWykres.Visible = true;
+            //ChWykres.Visible = true;
             GbWyniki.Controls.Add(ChWykres);
 
-            DgwWyniki = crl.Create_DataGridView("DgwWyniki", 485, 11, 460, 348);
-            DgwWyniki.Visible = true;
+            DgwWyniki = crl.Create_DataGridView("DgwWyniki", 320, 11, 305, 348);
             GbWyniki.Controls.Add(DgwWyniki);
+            //DgwWyniki.Visible = true;
 
-            // ustawienie domyślnego trybu wyświetlania wyników
-            CbResultMode.SelectedIndex = 0;
+            LbSelectedAlgorythm = crl.Create_Label("LbSelectedAlgorythm", 320, 60, font = new Font("Microsoft Sans Serif", 20, FontStyle.Bold),
+                                                   controlColor, foreColor = Color.Green, "Sortowanie Bąbelkowe");
+            GbWyniki.Controls.Add(LbSelectedAlgorythm);
+            LbSelectedAlgorythm.Visible = true;
+            LbSelectedAlgorythm.AutoSize = false;
+            LbSelectedAlgorythm.Width = 350;
+            LbSelectedAlgorythm.Height = 40;
+
+            LbNbSymulationLeft = crl.Create_Label("LbElementsToSortLeft", 415, 185, font = new Font("Microsoft Sans Serif", 8, FontStyle.Regular),
+                                                   controlColor, foreColor = Color.Black, "Czas do końca symulacji");
+            GbWyniki.Controls.Add(LbNbSymulationLeft);
+            LbNbSymulationLeft.Visible = true;
+            LbNbSymulationLeft.AutoSize = false;
+            LbNbSymulationLeft.Width = 200;
+
+            PbProcentWykonania = crl.Create_ProgressBar("PbProcentWykonania", 377, 200, 200, 30, 0, Alg.IloscSymulacji, 1);
+            GbWyniki.Controls.Add(PbProcentWykonania);
+            PbProcentWykonania.ForeColor = Color.FromArgb(255, 0, 0);
+            PbProcentWykonania.BackColor = Color.FromArgb(150, 0, 0);
+            PbProcentWykonania.Maximum = 100;
+            PbProcentWykonania.Value = 0;
+            PbProcentWykonania.BringToFront();
+            PbProcentWykonania.Visible = false;
+
+
+        // ustawienie domyślnego trybu wyświetlania wyników
+        CbResultMode.SelectedIndex = 0;
         }
 
 
@@ -420,6 +451,8 @@ namespace Analizator_Algorytmow_Sortowania
                         DgwWyniki.Rows.RemoveAt(0);
                 }
 
+                // wyświetlenie progress baru
+                PbProcentWykonania.Visible = true;
 
                 switch (Alg.Algorytm)
                 {
@@ -476,7 +509,7 @@ namespace Analizator_Algorytmow_Sortowania
 
             if (CbResultMode.SelectedIndex == 0)
             {
-                DgwWyniki.Visible = true;
+                //DgwWyniki.Visible = true;
                 DgwWyniki.Refresh();
             }
 
@@ -623,7 +656,7 @@ namespace Analizator_Algorytmow_Sortowania
             if (ChbManualData.Checked)
             {
                 errorProvider.Clear();
-                if (int.TryParse(iloscElementow, out value) && value > 100)
+                if (int.TryParse(iloscElementow, out value) && value > /*100*/ 1)
                 {
                     Alg.LiczbaElementow = value;
                     testParameters = true;
@@ -637,7 +670,7 @@ namespace Analizator_Algorytmow_Sortowania
                     return testParameters;
                 }
                 errorProvider.Clear();
-                if (int.TryParse(liczbaPowturzen, out value) && value > 10 && value < 500)
+                if (int.TryParse(liczbaPowturzen, out value) && value > /*10*/ 0 && value < 500)
                 {
                     Alg.IloscSymulacji = value;
                     testParameters = true;
@@ -752,9 +785,7 @@ namespace Analizator_Algorytmow_Sortowania
             Alg.firstDataTable.Columns.Add("Rozmiar tablicy", typeof (int));
             Alg.firstDataTable.Columns.Add("Liczba operacji", typeof (int));
             Alg.firstDataTable.Columns.Add("Czas (s)", typeof(double));
-            Alg.firstDataTable.Columns.Add("Złożoność obliczeniowa", Type.GetType("System.String"));
-            Alg.firstDataTable.Columns.Add("Stosunek rozmiaru tablicy do ilości iteracji", Type.GetType("System.String"));
-            Alg.firstDataTable.Columns.Add("Stosunek rozmiaru tablicy do Złożoności Analitycznej", Type.GetType("System.String"));
+            Alg.firstDataTable.Columns.Add("Stosunek ilości iteracji do ilości elementów", typeof(double));
 
             for (int i = 0; i < Alg.firstDataTable.Columns.Count; i++)
             {
@@ -773,32 +804,36 @@ namespace Analizator_Algorytmow_Sortowania
         // Dodanie wyników sortowania do tymczasowej DT
         private void AddToDataTable(DataTable dt, int iloscElementow, int licznikOperacji, double czasSortowania, int licznikPowtórzeń)
         {
-            //int nfi = (NumberFormatInfo)CultureInfo.InvariantCulture.NumberFormat.Clone();
-            //nfi.NumberGroupSeparator = " ";
-            //string formatted = 1234897.11m.ToString("#,0.00", nfi); // "1 234 897.11"
             DataRow row = dt.NewRow();
             row["Nr"] = (licznikPowtórzeń + 1);
-            row["Rozmiar tablicy"] = iloscElementow/*.ToString("{0 000 000}")*/;
-            row["Liczba operacji"] = licznikOperacji/*.ToString()*/;
-            row["Złożoność obliczeniowa"] = (((Alg.LiczbaElementow * Alg.LiczbaElementow) - Alg.LiczbaElementow) / 2).ToString();
+            row["Rozmiar tablicy"] = iloscElementow;
+            row["Liczba operacji"] = licznikOperacji;
             row["Czas (s)"] = czasSortowania;
-            row["Stosunek rozmiaru tablicy do ilości iteracji"] = (licznikOperacji / Alg.LiczbaElementow).ToString();
-            row["Stosunek rozmiaru tablicy do Złożoności Analitycznej"] = (Convert.ToDouble(Alg.LiczbaElementow) / czasSortowania).ToString();
+            row["Stosunek ilości iteracji do ilości elementów"] = Convert.ToDouble(licznikOperacji / iloscElementow);
             dt.Rows.Add(row);
         }
 
-    // napełnienie tablicy do posortowania liczbami losowymi 
-    private int[] NapełnienieTablicy(out int liczbaElementow)
+        // napełnienie tablicy do posortowania liczbami losowymi 
+        private int[] NapełnienieTablicy(out int liczbaElementow)
         {
             // Zainicjowanie zmiennej losowej
             rnd = new Random();
 
             // Utworzenie tymczasowej zmiennej lokalnej służącej do załadowania tablicy do sortowania
             int wylosowanaLiczba = 0;
+            int[] tablicaDoPosortowania;
 
-            // Zainicjowanie nowej tablicy tymczasowej
-            liczbaElementow = rnd.Next(100, 4999);
-            int[] tablicaDoPosortowania = new int[liczbaElementow];
+            if (ChbAutoData.Checked)
+            {
+                // Zainicjowanie nowej tablicy tymczasowej
+                liczbaElementow = rnd.Next(100, 4999);
+                tablicaDoPosortowania = new int[liczbaElementow];
+            }
+            else
+            {
+                liczbaElementow = Alg.LiczbaElementow;
+                tablicaDoPosortowania = new int[Alg.LiczbaElementow];
+            }
 
             // Napełnienie tablicy wartościami losowymi ze sprawdzeniem
             for (int i = 0; i < tablicaDoPosortowania.Length; i++)
@@ -811,16 +846,30 @@ namespace Analizator_Algorytmow_Sortowania
 
         private void RunBubbleSort()
         {
+            actVal = 0.0;
+            lnpStep = 100 / (double)Alg.IloscSymulacji;
+
+            PbProcentWykonania.Value = 0;
+            PbProcentWykonania.Visible = true;
+
             for (int m = 0; m < Alg.IloscSymulacji; m++)
             {
                 Thread.Sleep(7);
                 Alg.TablicaDoPosortowania = NapełnienieTablicy(out iloscElementow);
                 Alg.SortowanieBąbelkowe(Alg.TablicaDoPosortowania, out licznikOperacji, out czas);
                 AddToDataTable(Alg.firstDataTable, iloscElementow, licznikOperacji, czas, m);
+                actVal += lnpStep;
+                if ((int)actVal > 100)
+                    PbProcentWykonania.Value = 100;
+                else
+                    PbProcentWykonania.Value = (int)actVal;
             }
 
             DgwWyniki.DataSource = Alg.firstDataTable;
             DgwWyniki.Refresh();
+
+            PbProcentWykonania.Visible = false;
+            DgwWyniki.Visible = true;
 
 
         }
@@ -841,6 +890,44 @@ namespace Analizator_Algorytmow_Sortowania
         public override string ToString()
         {
             return CbText;
+        }
+    }
+
+    public class ColouredProgressBar : ProgressBar
+    {
+        public ColouredProgressBar()
+        {
+            this.SetStyle(ControlStyles.UserPaint, true);
+        }
+        protected override void OnPaintBackground(PaintEventArgs pevent)
+        {
+            // pozostawiamy puste, zapobiegnie to migotaniu.
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            const int inset = 2; // Minimalna wartość o którą można zmieniać rozmiar wypełnienia.
+
+            using (Image offscreenImage = new Bitmap(this.Width, this.Height))
+            {
+                using (Graphics offscreen = Graphics.FromImage(offscreenImage))
+                {
+                    Rectangle rect = new Rectangle(0, 0, this.Width, this.Height);
+
+                    if (ProgressBarRenderer.IsSupported)
+                        ProgressBarRenderer.DrawHorizontalBar(offscreen, rect);
+
+                    rect.Inflate(new Size(-inset, -inset)); // Domyślne wewnętrzne wypełnienie.
+                    rect.Width = (int)(rect.Width * ((double)this.Value / this.Maximum));
+                    if (rect.Width == 0) rect.Width = 1; // Zapobieganie rysowaniu wypełnienia o wartości 0.
+
+                    LinearGradientBrush brush = new LinearGradientBrush(rect, this.BackColor, this.ForeColor, LinearGradientMode.Vertical);
+                    offscreen.FillRectangle(brush, inset, inset, rect.Width, rect.Height);
+
+                    e.Graphics.DrawImage(offscreenImage, 0, 0);
+                    offscreenImage.Dispose();
+                }
+            }
         }
     }
 }

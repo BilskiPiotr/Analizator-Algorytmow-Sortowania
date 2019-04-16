@@ -7,6 +7,7 @@ namespace Analizator_Algorytmow_Sortowania
 {
     class Alg
     {
+        private static Panel panel = new Panel();
         public Alg()
         { }
 
@@ -54,6 +55,8 @@ namespace Analizator_Algorytmow_Sortowania
             // zatrzymanie stopera
             stoper.Stop();
             czasSortowaniaTablicy = Convert.ToDouble(stoper.Elapsed.TotalMilliseconds);
+            
+            // zmiana ilości pozostałych do wykonania symulacji
         }
 
 

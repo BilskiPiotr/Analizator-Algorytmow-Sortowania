@@ -165,46 +165,61 @@ namespace Analizator_Algorytmow_Sortowania
                 Location = new Point(x, y),
                 Width = width,
                 Height = height,
-                //AutoGenerateColumns = false,
+                AutoGenerateColumns = false,
                 RowHeadersVisible = false
             };
-            //dgw.BringToFront();
             dgw.ScrollBars = ScrollBars.Vertical;
             dgw.AllowUserToAddRows = false;
-            dgw.ColumnCount = 6;
-            dgw.ColumnHeadersHeight = 65;
+            dgw.ColumnCount = 5;
+            dgw.ColumnHeadersHeight = 75;
             dgw.Columns[0].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dgw.Columns[0].Name = "Nr";
             dgw.Columns[0].DataPropertyName = "Nr";
             dgw.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             dgw.Columns[0].Width = 30;
             dgw.Columns[1].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dgw.Columns[1].Name = "Liczba operacji";
-            dgw.Columns[1].DataPropertyName = "Liczba operacji";
+            dgw.Columns[1].Name = "Rozmiar tablicy";
+            dgw.Columns[1].DataPropertyName = "Rozmiar tablicy";
             dgw.Columns[1].DefaultCellStyle.Format = "N0";
             dgw.Columns[1].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dgw.Columns[1].Width = 70;
+            dgw.Columns[1].Width = 50;
             dgw.Columns[2].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dgw.Columns[2].Name = "Czas (s)";
-            dgw.Columns[2].DataPropertyName = "Czas (s)";
-            dgw.Columns[2].DefaultCellStyle.Format = "N3";
+            dgw.Columns[2].Name = "Liczba operacji";
+            dgw.Columns[2].DataPropertyName = "Liczba operacji";
+            dgw.Columns[2].DefaultCellStyle.Format = "N0";
             dgw.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dgw.Columns[2].Width = 50;
+            dgw.Columns[2].Width = 70;
             dgw.Columns[3].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dgw.Columns[3].Name = "Złożoność analityczna";
-            dgw.Columns[3].DataPropertyName = "Złożoność analityczna";
-            dgw.Columns[3].Width = 75;
+            dgw.Columns[3].Name = "Czas (s)";
+            dgw.Columns[3].DataPropertyName = "Czas (s)";
+            dgw.Columns[3].DefaultCellStyle.Format = "N3";
+            dgw.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dgw.Columns[3].Width = 55;
             dgw.Columns[4].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dgw.Columns[4].Name = "Stosunek rozmiaru tablicy do ilości iteracji";
-            dgw.Columns[4].DataPropertyName = "Stosunek rozmiaru tablicy do ilości iteracji";
-            dgw.Columns[4].Width = 90;
-            dgw.Columns[5].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dgw.Columns[5].Name = "Stosunek rozmiaru tablicy do Złożoności Analitycznej";
-            dgw.Columns[5].DataPropertyName = "Stosunek rozmiaru tablicy do Złożoności Analitycznej";
-            dgw.Columns[5].Width = 100;
-            //dgw.Visible = false;
+            dgw.Columns[4].Name = "Stosunek ilości iteracji do ilości elementów";
+            dgw.Columns[4].DataPropertyName = "Stosunek ilości iteracji do ilości elementów";
+            dgw.Columns[4].DefaultCellStyle.Format = "N0";
+            dgw.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dgw.Columns[4].Width = 80;
+            dgw.Visible = false;
 
             return dgw;
+        }
+
+        // ProgressBar w celu bieżącej prezentacji postępu sortowaniu 
+        public ColouredProgressBar Create_ProgressBar(string name, int x, int y, int width, int height, int min, int max, int step)
+        {
+            ColouredProgressBar pb = new ColouredProgressBar
+            {
+                Location = new Point(x, y),
+                Width = width,
+                Height = height,
+                Minimum = min,
+                Maximum = max,
+                Name = name,
+                Step = step
+            };
+            return pb;
         }
     }
 }
